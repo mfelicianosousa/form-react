@@ -1,95 +1,87 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import { useState, useEffect } from 'react'
+import styles from './Home.module.css'
+
 
 export default function Home() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  // tipos diferentes
+  const [loginState, setLoginState] = useState({
+      email: '',
+      password: ''
+    }
+  )
+
+  const [search, setSearch] = useState('')
+
+  const handleSignupForm = (event) => {
+    // Acionar uma api, acionar um backend para enviar os dados
+    event.preventDefault();
+    // console.log('HandleSignupForm');
+    console.log({name, email, password});
+  }
+
+  const HandleOnChangeLogin = (event, key) => {
+    setLoginState({...loginState,[key]: event.target.value});
+  }
+
+  const handleLoginForm = (event) => {
+    event.preventDefault();
+    console.log(loginState);
+  }
+
+  useEffect(()=>{
+    if (search.length > 2){
+      console.log(`Realizando busca para '${search}'`)
+    }
+  },[search])
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <div>
+      <form className={styles.form} onSubmit={handleSignupForm}>
+        <h1>Formulário de Cadastro</h1>
+        <input 
+           type="text" 
+           placeholder="Nome Completo"
+           value={name} onChange={(event) => setName(event.target.value)}
+           required/>
+        <input 
+           type="email" 
+           placeholder="email"
+           value={email} onChange={(event) => setEmail(event.target.value)}
+           required/>
+        <input 
+           type="password" 
+           placeholder="Password"
+           value={password} onChange={(event) => setPassword(event.target.value)}
+           required/>
+        <button type="submit">Enviar</button>
+      </form>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <form className={styles.form} onSubmit={handleLoginForm}>
+        <h1>Formulário de Login</h1>
+        <input 
+           type="email" 
+           placeholder="email"
+           value={loginState.email} onChange={(event)=> HandleOnChangeLogin(event, 'email')}
+
+           required/>
+        <input 
+           type="password" 
+           placeholder="Password"
+           value={loginState.password} onChange={(event)=> HandleOnChangeLogin(event, 'password')}
+           required/>
+        <button type="submit">Entrar</button>
+      </form>
+      <form className={styles.form}>
+        <h1>Formulário de Busca automática</h1>
+        <input 
+           type="text" 
+           placeholder="Digite sua busca"
+           value={search} onChange={(event) => setSearch(event.target.value)}
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      </form>
+    </div>
   );
 }
